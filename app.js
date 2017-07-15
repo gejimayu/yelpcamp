@@ -1,33 +1,13 @@
 var express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose");
+    mongoose    = require("mongoose"),
+    Campground  = require("./model/campground.js"),
+    seedDB      = require("./seeds.js");
 
+seedDB();
 mongoose.connect("mongodb://localhost/yelp_camp");
 app.use(bodyParser.urlencoded({extended: true}));
-
-var Campground = mongoose.model(
-                 "Campground", 
-                 new mongoose.Schema({
-                    name: String,
-                    image: String, 
-                    desc: String
-                 })
-                 );
-
-// Campground.create(
-//     {
-//         name: "Granite Hill", 
-//         image: "https://farm8.staticflickr.com/7252/7626464792_3e68c2a6a5.jpg",
-//         desc: "It's beautiful !!!!!! Trust me you won't regret this experience."
-//     },
-//     function(err, created) {
-//         if (err)
-//             console.log(err);
-//         else
-//             console.log(created);
-//     }
-// );
 
 app.get("/", function(req, res){
     res.render("landing.ejs");
@@ -38,10 +18,11 @@ app.get("/campgrounds/new", function(req, res){
 })
 
 app.get("/campgrounds/:id", function(req, res){
-    Campground.findById(req.params.id, function(err, found) {
+    Campground.findById(req.params.id).populate("comments").exec(function(err, found) {
         if (err)
-            console.log(err);
+            console.log("err");
         else
+            console.log(found);
             res.render("show.ejs", {Camp: found});
     });
 })

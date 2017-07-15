@@ -3,6 +3,10 @@
 <h1><%=Camp.name%></h1>
 <image src=<%=Camp.image%>>
 <p><%=Camp.desc%></p>
-
+<p>
+    <% Camp.comments.forEach(function(data){ %>
+        <strong><%= data.author %></strong> - <%= data.text %>
+    <% }); %>
+</p>
 
 <% include partials/footer %>
