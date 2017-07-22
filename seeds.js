@@ -41,6 +41,7 @@ function seedDB() {
                             if (err)
                                 console.log(err)
                             else {
+                                console.log("created a comment");
                                 campCreated.comments.push(commentCreated);
                                 campCreated.save(); 
                             }
