@@ -17,6 +17,7 @@
                     <h4 class="pull-right">$9.00/night</h4>
                     <h4><a><%=Camp.name%></a></h4>
                     <p><%=Camp.desc%></p>
+                    <p><em>Submitted By <%=Camp.author.username%></em></p>
                 </div>
                 <div class="well">
                     <div class="text-right">
@@ -25,7 +26,7 @@
                     <hr>
                     <% Camp.comments.forEach(function(data){ %>
                      <p class="pull-right">10 days ago</p>
-                    <p><strong><%= data.author %></strong></p>
+                    <p><strong><%= data.author.username %></strong></p>
                     <p><%= data.text %></p>
                     <% }); %>
                     <hr>
