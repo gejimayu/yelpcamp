@@ -21,37 +21,37 @@ var data = [
 ];    
 
 function seedDB() {
-    Campground.remove({}, function(err){
-        if (err)
-            console.log(err);
-        else {
-            // console.log("removed succesfully");
-            // data.forEach(function(ele){
-            //   Campground.create(ele, function(err, campCreated){
-            //         if (err)
-            //             console.log(err);
-            //         else {
-            //             console.log("added a campground");
-            //             Comment.create(
-            //                 {
-            //                     author: "Homer", 
-            //                     text: "fucking stupid"
-            //                 },
-            //                 function(err, commentCreated){
-            //                     if (err)
-            //                         console.log(err)
-            //                     else {
-            //                         console.log("created a comment");
-            //                         campCreated.comments.push(commentCreated);
-            //                         campCreated.save(); 
-            //                     }
-            //                 }
-            //             )
-            //         }
-            //   }); 
-            // });
-        }
-    });
+    // Campground.remove({}, function(err){
+    //     if (err)
+    //         console.log(err);
+    //     else {
+    //         console.log("removed succesfully");
+    //         data.forEach(function(ele){
+    //           Campground.create(ele, function(err, campCreated){
+    //                 if (err)
+    //                     console.log(err);
+    //                 else {
+    //                     console.log("added a campground");
+    //                     Comment.create(
+    //                         {
+    //                             author: "Homer", 
+    //                             text: "fucking stupid"
+    //                         },
+    //                         function(err, commentCreated){
+    //                             if (err)
+    //                                 console.log(err)
+    //                             else {
+    //                                 console.log("created a comment");
+    //                                 campCreated.comments.push(commentCreated);
+    //                                 campCreated.save(); 
+    //                             }
+    //                         }
+    //                     )
+    //                 }
+    //           }); 
+    //         });
+    //     }
+    // });
 }
 
 module.exports = seedDB;

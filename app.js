@@ -7,7 +7,8 @@ var express         = require("express"),
     Campground      = require("./model/campground.js"),
     Comment         = require("./model/comment.js"),
     User            = require("./model/user.js"),
-    seedDB          = require("./seeds.js");
+    seedDB          = require("./seeds.js"),
+    methodOverride  = require("method-override");
     
 //requiring routes
 var idxRoute    = require("./routes/index.js"),
@@ -36,6 +37,8 @@ app.use(function(req, res, next){
     res.locals.currentUser = req.user;
     next();
 });
+
+app.use(methodOverride('_method'));
 
 app.use('/', idxRoute);
 app.use('/campgrounds', campgroundRoute);

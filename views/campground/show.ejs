@@ -18,6 +18,14 @@
                     <h4><a><%=Camp.name%></a></h4>
                     <p><%=Camp.desc%></p>
                     <p><em>Submitted By <%=Camp.author.username%></em></p>
+                    <% if (currentUser && currentUser._id.equals(Camp.author.id)) { %>
+                        <a class="btn btn-sm btn-warning" href="/campgrounds/<%=Camp._id%>/edit">Edit</a>
+                        <div class="btn-group">
+                            <form action="/campgrounds/<%=Camp._id%>?_method=DELETE" method="POST">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    <% } %>
                 </div>
                 <div class="well">
                     <div class="text-right">
@@ -25,8 +33,18 @@
                     </div>
                     <hr>
                     <% Camp.comments.forEach(function(data){ %>
-                     <p class="pull-right">10 days ago</p>
+                    <p class="pull-right">10 days ago</p>
                     <p><strong><%= data.author.username %></strong></p>
+                    <% if (currentUser && currentUser._id.equals(data.author.id)) { %>
+                        <div class="pull-right">
+                            <a class="btn btn-sm btn-warning" href="/campgrounds/<%=Camp._id%>/comments/<%=data._id%>/edit">Edit</a>
+                            <div class="btn-group">
+                                <form action="/campgrounds/<%=Camp._id%>/comments/<%=data._id%>?_method=DELETE" method="POST">
+                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    <% } %>
                     <p><%= data.text %></p>
                     <% }); %>
                     <hr>
