@@ -1,10 +1,11 @@
 var express = require("express"),
     route   = express.Router({mergeParams: true}),
     Campground = require("../model/campground.js"),
-    Comment    = require("../model/comment.js");
+    Comment    = require("../model/comment.js"),
+    middlewareObj = require("../middleware/index.js");
     
 //Show Comment Form
-route.get("/new", isLoggedIn, function(req, res){
+route.get("/new", middlewareObj.isLoggedIn, function(req, res){
     Campground.findById(req.params.id, function(err, campground){
         if (err)
             console.log(err);
@@ -14,7 +15,7 @@ route.get("/new", isLoggedIn, function(req, res){
 });
 
 //Handle Comment Logic
-route.post("/", isLoggedIn, function(req, res){
+route.post("/", middlewareObj.isLoggedIn, function(req, res){
     Campground.findById(req.params.id, function(err, foundCampground){
         if (err)
             console.log(err);
@@ -36,7 +37,7 @@ route.post("/", isLoggedIn, function(req, res){
 });
 
 //EDIT COMMENT
-route.get("/:comment_id/edit", authorizeComment, function(req, res){
+route.get("/:comment_id/edit", middlewareObj.authorizeComment, function(req, res){
     Comment.findById(req.params.comment_id, function(err, foundComment){
         if (err)
             console.log(err);
@@ -47,7 +48,7 @@ route.get("/:comment_id/edit", authorizeComment, function(req, res){
 });
 
 //HANDLE EDIT COMMENT
-route.put("/:comment_id", authorizeComment, function(req, res){
+route.put("/:comment_id", middlewareObj.authorizeComment, function(req, res){
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, foundComment){
         if (err)
             res.send("update failed");
@@ -58,38 +59,12 @@ route.put("/:comment_id", authorizeComment, function(req, res){
 
 
 //DELETE COMMENT
-route.delete("/:comment_id", authorizeComment, function(req, res){
+route.delete("/:comment_id",  middlewareObj.authorizeComment, function(req, res){
     Comment.findByIdAndRemove(req.params.comment_id, function(err){
         if (err)
             res.send("deletion failed");
         res.redirect("/campgrounds/" + req.params.id);
     });
 });
-
-//middleware
-function isLoggedIn(req, res, next){
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-};
-
-function authorizeComment(req, res, next){
-    if (req.isAuthenticated()) {
-        Comment.findById(req.params.comment_id, function(err, foundComment) {
-            if (err)
-                res.redirect("back");
-            else {
-                if (req.user._id.equals(foundComment.author.id))
-                    return next();
-                else
-                    res.redirect("back");
-            }
-        });
-    }
-    else {
-        res.redirect("back");
-    }
-}
 
 module.exports = route;

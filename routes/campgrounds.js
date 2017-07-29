@@ -1,12 +1,13 @@
 var express = require("express"),
     route   = express.Router(),
     Campground = require("../model/campground.js"),
-    sanitizer   = require("express-sanitizer");
+    sanitizer   = require("express-sanitizer"),
+    middlewareObj = require("../middleware/index.js");
     
 route.use(sanitizer());
 
 //New Campground
-route.get("/new", isLoggedIn, function(req, res){
+route.get("/new",  middlewareObj.isLoggedIn, function(req, res){
     res.render("campground/new.ejs");
 });
 
@@ -32,7 +33,7 @@ route.get("/", function(req, res){
 });
 
 //Post Route Handler, receiving new campground and redirecting to /campgrounds
-route.post("/", isLoggedIn, function(req, res){
+route.post("/",  middlewareObj.isLoggedIn, function(req, res){
     var name = req.body.campground.name;
     var image = req.body.campground.image;
     var desc = req.body.campground.desc;
@@ -48,7 +49,7 @@ route.post("/", isLoggedIn, function(req, res){
 });
 
 //EDIT ROUTE
-route.get("/:id/edit", authorizeCamp, function(req, res){
+route.get("/:id/edit",  middlewareObj.authorizeCamp, function(req, res){
     Campground.findById(req.params.id, function(err, camp){
         if (err) {
             console.log(err);
@@ -60,7 +61,7 @@ route.get("/:id/edit", authorizeCamp, function(req, res){
 });
 
 //UPDATE ROUTE
-route.put("/:id", authorizeCamp, function(req, res){
+route.put("/:id",  middlewareObj.authorizeCamp, function(req, res){
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, camp){
         if (err)
             res.send("update failed");
@@ -70,7 +71,7 @@ route.put("/:id", authorizeCamp, function(req, res){
 });
 
 //DELETE ROUTE
-route.delete("/:id", authorizeCamp, function(req, res){
+route.delete("/:id",  middlewareObj.authorizeCamp, function(req, res){
     Campground.findByIdAndRemove(req.params.id, function(err){
         if (err)
             res.send("delete failed");
@@ -79,29 +80,4 @@ route.delete("/:id", authorizeCamp, function(req, res){
     });
 });
 
-//middleware
-function isLoggedIn(req, res, next){
-    if (req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-};
-
-function authorizeCamp(req, res, next){
-    if (req.isAuthenticated()) {
-        Campground.findById(req.params.id, function(err, camp) {
-            if (err)
-                res.redirect("back");
-            else {
-                if (req.user._id.equals(camp.author.id))
-                    return next();
-                else
-                    res.redirect("back");
-            }
-        });
-    }
-    else {
-        res.redirect("back");
-    }
-}
 module.exports = route;
