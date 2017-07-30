@@ -3,6 +3,7 @@ var express         = require("express"),
     bodyParser      = require("body-parser"),
     mongoose        = require("mongoose"),
     passport        = require("passport"),
+    flash           = require("connect-flash"),
     LocalStratey    = require("passport-local"),
     Campground      = require("./model/campground.js"),
     Comment         = require("./model/comment.js"),
@@ -27,6 +28,7 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStratey(User.authenticate()));
@@ -35,9 +37,10 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(function(req, res, next){
     res.locals.currentUser = req.user;
+    res.locals.errorMsg = req.flash("error");
+    res.locals.successMsg = req.flash("success");
     next();
 });
-
 app.use(methodOverride('_method'));
 
 app.use('/', idxRoute);

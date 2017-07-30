@@ -40,12 +40,16 @@ route.post("/",  middlewareObj.isLoggedIn, function(req, res){
     var author = {id: req.user._id, username: req.user.username};
     var newCampground = {name: name, image: image, desc: desc, author: author};
     Campground.create(newCampground, function(err, created){
-        if (err)
-            console.log(err);
-        else
+        if (err) {
+            req.flash("error", "Something went wrong :(");
+            res.redirect("back");
+        }
+        else {
+            req.flash("success", "Campground succesfully added");
+            res.redirect("/campgrounds");
             console.log("Succesfully added " + created);
+        }
     });
-    res.redirect("/campgrounds");
 });
 
 //EDIT ROUTE
@@ -63,20 +67,28 @@ route.get("/:id/edit",  middlewareObj.authorizeCamp, function(req, res){
 //UPDATE ROUTE
 route.put("/:id",  middlewareObj.authorizeCamp, function(req, res){
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, camp){
-        if (err)
-            res.send("update failed");
-        else
+        if (err) {
+            req.flash("error", "Something went wrong :(");
+            res.redirect("back");
+        }
+        else {
+            req.flash("success", "Campground succesfully edited");
             res.redirect("/campgrounds/" + req.params.id);
+        }
     });
 });
 
 //DELETE ROUTE
 route.delete("/:id",  middlewareObj.authorizeCamp, function(req, res){
     Campground.findByIdAndRemove(req.params.id, function(err){
-        if (err)
-            res.send("delete failed");
-        else
+        if (err) {
+            req.flash("error", "Something went wrong :(");
+            res.redirect("back");
+        }
+        else {
+            req.flash("success", "Campground succesfully deleted");
             res.redirect("/campgrounds");
+        }
     });
 });
 

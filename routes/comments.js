@@ -29,6 +29,7 @@ route.post("/", middlewareObj.isLoggedIn, function(req, res){
                     createdComment.save();
                     foundCampground.comments.push(createdComment);
                     foundCampground.save();
+                    req.flash("success", "Comment succesfully added");
                     res.redirect("/campgrounds/" + req.params.id);
                 }
             });
@@ -50,10 +51,14 @@ route.get("/:comment_id/edit", middlewareObj.authorizeComment, function(req, res
 //HANDLE EDIT COMMENT
 route.put("/:comment_id", middlewareObj.authorizeComment, function(req, res){
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, foundComment){
-        if (err)
-            res.send("update failed");
-        else
+        if (err) {
+            req.flash("error", "Comment not found");
+            res.redirect("back");
+        }
+        else {
+            req.flash("success", "Comment succesfully edited");
             res.redirect("/campgrounds/" + req.params.id);
+        }
     });
 });
 
@@ -61,8 +66,11 @@ route.put("/:comment_id", middlewareObj.authorizeComment, function(req, res){
 //DELETE COMMENT
 route.delete("/:comment_id",  middlewareObj.authorizeComment, function(req, res){
     Comment.findByIdAndRemove(req.params.comment_id, function(err){
-        if (err)
-            res.send("deletion failed");
+        if (err) {
+            req.flash("error", "Something went wrong");
+            res.redirect("back");
+        }
+        req.flash("success", "Comment succesfully deleted");
         res.redirect("/campgrounds/" + req.params.id);
     });
 });
