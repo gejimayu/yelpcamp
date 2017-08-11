@@ -10,7 +10,7 @@ route.get("/", function(req, res){
     
 //show register form
 route.get("/register", function(req, res){
-    res.render("register.ejs");
+    res.render("register.ejs", {page: "register"});
 });
 
 //handle sign up logic
@@ -21,22 +21,23 @@ route.post("/register", function(req, res){
             return res.redirect("/register");
         }
         passport.authenticate("local")(req, res, function(){
-            req.flash("success", "Welcome to YelpCamp " + user.username);
-            res.redirect("/campgrounds");
+            req.flash("success", "Welcome to WebSurd " + user.username);
+            res.redirect("/posts");
         });
     });
 });
 
 //show login form
 route.get("/login", function(req, res){
-    res.render("login.ejs");
+    res.render("login.ejs", {page: "login"});
 });
 
 //handle login logic
 route.post("/login", passport.authenticate("local", 
     {
-        successRedirect: "/campgrounds", 
-        failureRedirect: "/login"
+        successRedirect: "/posts", 
+        failureRedirect: "login",
+        failureFlash: true
     }), function(req, res){
 });
 
@@ -44,7 +45,7 @@ route.post("/login", passport.authenticate("local",
 route.get("/logout", function(req, res){
    req.logout();
    req.flash("success", "You just logged out");
-   res.redirect("/campgrounds");
+   res.redirect("/posts");
 });
 
 module.exports = route;

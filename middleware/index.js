@@ -1,4 +1,4 @@
-var Campground  = require("../model/campground.js"),
+var Post  = require("../model/post.js"),
     Comment     = require("../model/comment.js");
 
 var middlewareObj = {
@@ -9,15 +9,15 @@ var middlewareObj = {
         req.flash("error", "You have to log in first");
         res.redirect("/login");
     },
-    authorizeCamp: function (req, res, next){
+    authorizePost: function (req, res, next){
         if (req.isAuthenticated()) {
-            Campground.findById(req.params.id, function(err, camp) {
+            Post.findById(req.params.id, function(err, pos) {
                 if (err) {
-                    req.flash("error", "Campground not found");
+                    req.flash("error", "Post not found");
                     res.redirect("back");
                 }
                 else {
-                    if (req.user._id.equals(camp.author.id)) {
+                    if (req.user._id.equals(pos.author.id)) {
                         return next();
                     } 
                     else {

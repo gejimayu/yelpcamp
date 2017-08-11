@@ -1,24 +1,38 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Yelp Camp</title>
+        <!-- Make site responsive on mobile/tablet -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Post anything you want here !</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="/stylesheets/main.css">
     </head>
     <body>
     <nav class="navbar navbar-default">
-        <div class="container-fluid">
+        <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">YelpCamp</a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">WebSurd</a>
             </div>
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse" id="nav">
                 <ul class="nav navbar-nav navbar-right">
                     <% if (currentUser) {%>
-                        <li><a href="#">Sign in as <%=currentUser.username%></a></li>
+                        <li class="<%= typeof page !== 'undefined' && page === 'posts' ? 'active' : '' %>">
+                            <a href="#">Sign in as <%=currentUser.username%></a>
+                        </li>
                         <li><a href="/logout">Logout</a></li>
                     <% } else { %>
-                        <li><a href="/login">Login</a></li>
-                        <li><a href="/register">Sign Up</a></li>
+                        <li class="<%= typeof page !== 'undefined' && page === 'login' ? 'active' : '' %>">
+                            <a href="/login">Login</a>
+                        </li>
+                        <li class="<%= typeof page !== 'undefined' && page === 'register' ? 'active' : '' %>">
+                            <a href="/register">Sign Up</a>
+                        </li>
                     <% } %>
                 </ul>
             </div>
@@ -36,3 +50,5 @@
             </div>
         <% } %>
     </div>
+    
+    <div class="container">

@@ -1,0 +1,24 @@
+<% include ../partials/header %>
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>Welcome to WebSurd !</h1>
+        <a class="btn btn-primary btn-lg" href="/posts/new">Add New Absurd Post !</a>
+    </div>
+</div>
+<div class="row text-center" style="display: flex; flex-wrap: wrap">
+    <% thePosts.forEach(function(elem){ %>
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="thumbnail">
+                <a href="/posts/<%=elem._id%>">
+                    <image src=<%= elem.image %>>
+                    <div class="caption">
+                        <h4><%= elem.name %></h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+    <% }); %>
+</div>
+
+<% include ../partials/footer %>

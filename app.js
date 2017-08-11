@@ -5,7 +5,7 @@ var express         = require("express"),
     passport        = require("passport"),
     flash           = require("connect-flash"),
     LocalStratey    = require("passport-local"),
-    Campground      = require("./model/campground.js"),
+    Post           = require("./model/post.js"),
     Comment         = require("./model/comment.js"),
     User            = require("./model/user.js"),
     seedDB          = require("./seeds.js"),
@@ -14,11 +14,11 @@ var express         = require("express"),
 //requiring routes
 var idxRoute    = require("./routes/index.js"),
     commentRoute = require("./routes/comments.js"),
-    campgroundRoute = require("./routes/campgrounds.js");
+    postRoute = require("./routes/posts.js");
 
 //setting up database
 seedDB();
-mongoose.connect("mongodb://localhost/yelp_camp");
+mongoose.connect("mongodb://localhost/post_db");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
@@ -44,9 +44,9 @@ app.use(function(req, res, next){
 app.use(methodOverride('_method'));
 
 app.use('/', idxRoute);
-app.use('/campgrounds', campgroundRoute);
-app.use('/campgrounds/:id/comments', commentRoute);
+app.use('/posts', postRoute);
+app.use('/posts/:id/comments', commentRoute);
 
 app.listen(process.env.PORT, process.env.IP, function(){
-    console.log("YELP CAMP HAS STARTED!");
+    console.log("WEBSITE HAS STARTED!");
 });

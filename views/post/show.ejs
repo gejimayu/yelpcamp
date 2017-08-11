@@ -1,0 +1,54 @@
+<% include ../partials/header %>
+
+<div class="row">
+    <div class="col-md-3">
+        <p class="lead">WebSurd</p>
+        <ul class="list-group">
+            <li class="list-group-item active">Info 1</li>
+            <li class="list-group-item">Info 2</li>
+            <li class="list-group-item">Info 3</li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        <div class="thumbnail">
+            <image class="img-responsive" src=<%=thePost.image%>>
+            <div class="caption">
+                <h4><a><%=thePost.name%></a></h4>
+                <p><%=thePost.desc%></p>
+                <p><em>Submitted By <%=thePost.author.username%></em></p>
+                <% if (currentUser && currentUser._id.equals(thePost.author.id)) { %>
+                    <a class="btn btn-sm btn-warning" href="/posts/<%=thePost._id%>/edit">Edit</a>
+                    <div class="btn-group">
+                        <form action="/posts/<%=thePost._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
+                <% } %>
+            </div>
+            <div class="well">
+                <div class="text-right">
+                    <a class="btn btn-sm btn-primary" href="/posts/<%=thePost._id%>/comments/new">Submit New Comment</a>
+                </div>
+                <hr>
+                <% thePost.comments.forEach(function(data){ %>
+                <p class="pull-right">10 days ago</p>
+                <p><strong><%= data.author.username %></strong></p>
+                <% if (currentUser && currentUser._id.equals(data.author.id)) { %>
+                    <div class="pull-right">
+                        <a class="btn btn-sm btn-warning" href="/posts/<%=thePost._id%>/comments/<%=data._id%>/edit">Edit</a>
+                        <div class="btn-group">
+                            <form action="/posts/<%=thePost._id%>/comments/<%=data._id%>?_method=DELETE" method="POST">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                <% } %>
+                <p><%= data.text %></p>
+                <% }); %>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<% include ../partials/footer %>
